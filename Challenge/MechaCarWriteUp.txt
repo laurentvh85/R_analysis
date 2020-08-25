@@ -1,0 +1,128 @@
+In this project I used R to predict the mpg of prototypes using a number of variables within the dataset.
+I initially looked at mpg vs all other categories to see if there were significant variables.
+
+summary(lm(mpg ~ vehicle.length + vehicle.weight + spoiler.angle + ground.clearance + AWD,data=MechaCar))
+
+    Residuals:
+         Min       1Q   Median       3Q      Max 
+    -19.4701  -4.4994  -0.0692   5.4433  18.5849 
+
+    Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)    
+    (Intercept)      -1.040e+02  1.585e+01  -6.559 5.08e-08 ***
+    vehicle.length    6.267e+00  6.553e-01   9.563 2.60e-12 ***
+    vehicle.weight    1.245e-03  6.890e-04   1.807   0.0776 .  
+    spoiler.angle     6.877e-02  6.653e-02   1.034   0.3069    
+    ground.clearance  3.546e+00  5.412e-01   6.551 5.21e-08 ***
+    AWD              -3.411e+00  2.535e+00  -1.346   0.1852    
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    Residual standard error: 8.774 on 44 degrees of freedom
+    Multiple R-squared:  0.7149,	Adjusted R-squared:  0.6825 
+    F-statistic: 22.07 on 5 and 44 DF,  p-value: 5.35e-11
+
+The above data shows that the intercept, the vehicle length, and ground clearance have significant effects on mpg. We can see this
+by the very small p values. The other variables have non-statistically significant p-values, suggesting they are random for mpg.
+The R-squared value above shows a strong correlation between our variables. I also decided to run the analysis on the variables that 
+had the most effect on mpg.
+
+summary(lm(mpg ~ vehicle.length + ground.clearance ,data=MechaCar))
+
+    Residuals:
+        Min      1Q  Median      3Q     Max 
+    -17.493  -7.705   1.344   6.642  18.500 
+
+    Coefficients:
+                     Estimate Std. Error t value Pr(>|t|)    
+    (Intercept)      -91.5573    13.9649  -6.556 3.86e-08 ***
+    vehicle.length     6.0811     0.6732   9.033 7.68e-12 ***
+    ground.clearance   3.5669     0.5401   6.604 3.26e-08 ***
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    Residual standard error: 9.078 on 47 degrees of freedom
+    Multiple R-squared:  0.674,	Adjusted R-squared:  0.6601 
+    F-statistic: 48.59 on 2 and 47 DF,  p-value: 3.637e-12
+
+This time all the variables I looked at are significant. The R-squared Pearson correlation is now at a moderate strength. 2 variables account 
+for almost 70% of the explained variance for mpg.
+
+Challenge questions:
+
+- Which variables/coefficients provided a non-random amount of variance to the mpg values in the dataset?
+    Vehicle length, ground clearance, and the intercept
+
+- Is the slope of the linear model considered to be zero? Why or why not?
+    No,the slopes of vehicle length and ground clearance are 6.0811 and 3.5669. I can reject the null hypothesis thats the slope is 0.
+    The p-values for each were well below 0.05 meaning they are statistically significant.
+
+- Does this linear model predict mpg of MechaCar prototypes effectively? Why or why not?
+yes, in the first summary we looked at the R-squared was 0.7149 vs the second more focused summary of 0.674. This means that around 70% of the
+variance is explained. An R-squared number that is too high can also be suspect (upwards of 90).
+
+
+Suspension....................
+
+In this section i created a summary statistics table for the PSI info.
+
+summary(suspension$PSI)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1463    1497    1500    1500    1501    1536 
+
+The summary function provides part of the data that we want, but it is not accurate enough. I ran several functions to get the following metrics:
+
+Mean: 1499.531
+Median: 1499.747
+Variance: 76.23459
+Standard Deviation: 8.731242
+
+One of the design specifications is that the variance does not exceed 100 per inch. The data above shows that the design falls within the required 
+range. The variance is 76.23459, well within the 100 pound limit. This variance means that the PSI will vary up plus or minus 76.23459 from the mean.
+
+T-test---------------------
+
+One Sample t-test
+
+data:  log10(suspension$PSI)
+t = -7247086, df = 149, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 1500
+95 percent confidence interval:
+ 3.175540 3.176356
+sample estimates:
+mean of x 
+ 3.175948 
+
+Suspension coil pound-per-inch results are statistically different from the mean population results of 1,500 pounds per inch. We can reject the null 
+hypothesis because of the p-value < 2.2e-16. 
+
+
+Future study:
+I would look at a multitude of different metrics to see what the buyers are really looking for.
+
+1) Think critically about what metrics you would think would be of interest to a consumer (cost, fuel efficiency, color options, etc.):
+    I think the following items would be of interest:
+        warranty - people want to know they are protected when their car breaks down
+        model choice - different seating capacities and options can be more popular
+        reliability - will the car break down?
+        fuel efficiency - city and highway mileage efficiency may have cost savings
+        price - price is almost always one of the largest factors
+        options - can the consumer customize the car?
+        color options - what colors sell the best
+        performance - how does the car perform in different tests such as acceleration, braking, turning etc...
+        emissions - environmental impact is a popular topic now. 
+
+2) Determine what question we would ask, what the null and alternative hypothesis would be to answer that question, and what statistical test could be 
+used to test this hypothesis.
+
+     - Null hypothesis = For each metric listed above, out-performing the competitor, will have no effect on the buyer's decision to 
+       purchase the MechaCar.
+     - Alternative hypothesis = There is  clear statistical significance between out-performing the competition and deciding to purchase the vehicle
+    - Statistical test = Chi-Squared Test to determine the frequencies between the metrics.
+    - we can also conduct two sample t-tests between the mechacar and comparable cars for each metric.
+    - we can use the Pearson's correlation to determine the correlations 
+
+3) we would collect this data from surveys, consumer reports, and manufacturer reports. We can look at the competition and see what works for them.
+    I believe surveying the consumer will give us a lot of insight into what the average person is looking at for their car needs.
+
+
